@@ -3,6 +3,12 @@
 # The program takes the phone number, message, hour and minute as input and sends the message at the specified time.
 
 import pywhatkit as kit
+from flask import Flask, render_template, request, jsonify
+from datetime import datetime
+import os
+import time
+
+app = Flask(__name__)
 
 # Function to send WhatsApp message
 def send_whatsapp_message(phone_number, message, hour, minute):
@@ -16,22 +22,61 @@ def send_whatsapp_message(phone_number, message, hour, minute):
     minute (int): Minute of the hour.
     """
     try:
-        kit.sendwhatmsg(phone_number, message, hour, minute)
-        print("Message scheduled successfully!")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+        # Make sure the phone number is in the correct format
+        phone_number = phone_number.replace(" ", "").replace("-", "")
+        if not phone_number.startswith("+"):
+            phone_number = "+" + phone_number
 
-# Example usage
+        # Check if the time has already passed
+        now = datetime.now()
+        if hour < now.hour or (hour == now.hour and minute <= now.minute):
+            return False, "Please select a future time"
+
+        # Add a small delay to ensure WhatsApp Web is ready
+        kit.sendwhatmsg(phone_number, message, hour, minute, wait_time=15)
+        return True, "Message scheduled successfully! Please keep WhatsApp Web open."
+    except Exception as e:
+        if "web.whatsapp.com" in str(e):
+            return False, "Please make sure WhatsApp Web is logged in and try again"
+        return False, f"Error: {str(e)}"
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/schedule', methods=['POST'])
+def schedule_message():
+    try:
+        data = request.get_json()
+        phone = data.get('phone')
+        message = data.get('message')
+        datetime_str = data.get('datetime')
+        
+        # Convert datetime string to hour and minute
+        dt = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M')
+        hour = dt.hour
+        minute = dt.minute
+        
+        # Clean phone number
+        phone = ''.join(filter(lambda x: x.isdigit() or x == '+', phone))
+        
+        success, msg = send_whatsapp_message(phone, message, hour, minute)
+        
+        return jsonify({
+            'success': success,
+            'message': msg,
+            'scheduledTime': {
+                'hour': hour,
+                'minute': minute
+            }
+        })
+            
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': "Error scheduling message. Please make sure WhatsApp Web is open and try again."
+        })
+
 if __name__ == "__main__":
-    # Your details
-    phone_number = ""  #  number with country code
-    message = """ Hello! This is a test message."""
-    
-    # Time to send the message (3rd December at 00:13)
-    # 0-23 for hour and 0-59 for minute
-    hour = 0  
-    minute = 13
-    
-    # Send the message
-    send_whatsapp_message(phone_number, message, hour, minute)
+    app.run(debug=True)
 

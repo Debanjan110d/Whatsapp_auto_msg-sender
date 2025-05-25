@@ -1,0 +1,148 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f2f5;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #25D366;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.instructions {
+    background-color: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #25D366;
+}
+
+.instructions p {
+    margin: 5px 0;
+    color: #1a1a1a;
+}
+
+.instructions ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.instructions li {
+    margin: 5px 0;
+    color: #1a1a1a;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+button {
+    background-color: #25D366;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #128C7E;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.countdown {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    color: #075E54;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.time-unit {
+    font-weight: bold;
+    color: #25D366;
+}
+
+.error {
+    color: #dc3545;
+    margin-top: 10px;
+    text-align: center;
+    padding: 10px;
+    background-color: #fff3f3;
+    border-radius: 4px;
+    display: none;
+}
+
+.error:not(:empty) {
+    display: block;
+}
+
+.status-message {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.success {
+    color: #28a745;
+    background-color: #d4edda;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
